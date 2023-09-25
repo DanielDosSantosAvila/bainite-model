@@ -524,7 +524,7 @@ def simplified_bainite_model(bainite_params: Bainite, guessed_params):
     c2 = bainite_params.chemical_composition.c2
     t0_prime_avg = bainite_params.chemical_composition.t0prime_celsius
     temp_celsius = bainite_params.temp_celsius
-    temp_kelvin = temp_celsius + 273
+    temp_kelvin = temp_celsius + 273.15
     vibration_factor = k * temp_kelvin / h
     time = bainite_params.kinetics.experiment_time_datapoints
 
@@ -536,7 +536,7 @@ def simplified_bainite_model(bainite_params: Bainite, guessed_params):
     autocatalytic_factor = ((n_s_a / n_s_gb) * grain_size / (grain_shape * sub_unit_length)
                             * np.exp((q_gb - q_a) / (r * temp_kelvin)))
     kappa = vibration_factor * nuc_sites_gb * np.exp(- q_gb / (r * temp_kelvin)) * sub_unit_volume
-    max_c_aus = x_avg + (t0_prime_avg - temp_kelvin) / c2
+    max_c_aus = x_avg + (t0_prime_avg - temp_celsius) / c2
     f_max = (max_c_aus - x_avg) / (max_c_aus - xb)
     fraction = (f_max * (1 - np.exp(-kappa * (1 + autocatalytic_factor) * time))
                 / (autocatalytic_factor * np.exp(-kappa * (1 + autocatalytic_factor) * time) + 1))
@@ -576,7 +576,8 @@ def make_single_fit_params(bainite_params: Bainite) -> Parameters:
     # Create parameters
     fit_params = Parameters()
     fit_params.add('act_energy_gb', value=q_gb_guess, min=q_gb_guess*0.5, max=q_gb_guess*1.5)
-    fit_params.add('act_energy_autocatalysis', value=q_a_guess, min=q_a_guess*0.5, max=q_a_guess*1.5)
+    fit_params.add('delta_q', value=0, min=0, max=30e3)
+    fit_params.add('act_energy_autocatalysis', expr='act_energy_gb - delta_q')
     fit_params.add('xb', value=xb_guess, min=0, max=c_at_fr_avg)
 
     # Fine-tune parameters
