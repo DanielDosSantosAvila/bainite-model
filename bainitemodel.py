@@ -1,6 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from scipy import constants
 from scipy.integrate import solve_ivp
 from periodictable import elements
@@ -219,10 +219,10 @@ class TransformationKinetics:
         Bainite fraction datapoints of the simulation, in volume fraction. Default is empty array.
 
     """
-    experiment_time_datapoints: np.ndarray = np.array([])
-    experiment_fraction_datapoints: np.ndarray = np.array([])
-    simulation_time_datapoints: np.ndarray = np.array([])
-    simulation_fraction_datapoints: np.ndarray = np.array([])
+    experiment_time_datapoints: np.ndarray = field(default_factory=lambda: np.array([]))
+    experiment_fraction_datapoints: np.ndarray = field(default_factory=lambda: np.array([]))
+    simulation_time_datapoints: np.ndarray = field(default_factory=lambda: np.array([]))
+    simulation_fraction_datapoints: np.ndarray = field(default_factory=lambda: np.array([]))
 
 
 @dataclass
@@ -275,7 +275,7 @@ class Bainite:
     xb: float = None
     n_s_gb: float = 1e16
     n_s_autocatalysis: float = 1e16
-    kinetics: TransformationKinetics = TransformationKinetics()
+    kinetics: TransformationKinetics = field(default_factory=lambda: TransformationKinetics())
     name: str = None
 
     def __post_init__(self):
