@@ -635,8 +635,8 @@ def fit_single_curve(bainite_params: Bainite, *, fit_params: Parameters = None, 
         statistics.
 
     """
-    if (bainite_params.kinetics.experiment_time_datapoints == np.array([]) or
-            bainite_params.kinetics.experiment_fraction_datapoints == np.array([])):
+    if (len(bainite_params.kinetics.experiment_time_datapoints) == 0 or
+            len(bainite_params.kinetics.experiment_fraction_datapoints) == 0):
         raise AttributeError(f"Missing experimental datapoints in {bainite_params}.kinetics.")
     if (len(bainite_params.kinetics.experiment_time_datapoints)
             != len(bainite_params.kinetics.experiment_fraction_datapoints)):
@@ -776,8 +776,8 @@ def fit_multiple_curves(bainite_params: list[Bainite], *, fit_params: Parameters
         raise IndexError('bainite_params should contain at least two elements')
     
     for bain in bainite_params:
-        if (bain.kinetics.experiment_time_datapoints == np.array([]) or
-                bain.kinetics.experiment_fraction_datapoints == np.array([])):
+        if (len(bain.kinetics.experiment_time_datapoints) == 0 or
+                len(bain.kinetics.experiment_fraction_datapoints) == 0):
             raise AttributeError(f"Missing experimental datapoints in {bain}.kinetics.")
         if (len(bain.kinetics.experiment_time_datapoints)
                 != len(bain.kinetics.experiment_fraction_datapoints)):
@@ -804,8 +804,9 @@ def fit_multiple_curves(bainite_params: list[Bainite], *, fit_params: Parameters
             model_fraction = model.y[0] + model.y[1]
             experimental = bainite_param.kinetics.experiment_fraction_datapoints
             if model_fraction.shape != experimental.shape:
-                print(f"{q_gb}, {q_a}, {xb}")
-            residual = experimental - model_fraction
+                residual = np.ones(len(experimental))
+            else:
+                residual = experimental - model_fraction
             residual_weighted = residual / np.sqrt(len(experimental))
             full_residuals = np.concatenate((full_residuals, residual_weighted))
 
