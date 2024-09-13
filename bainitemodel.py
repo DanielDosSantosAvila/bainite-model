@@ -660,7 +660,11 @@ def fit_single_curve(bainite_params: Bainite, *, fit_params: Parameters = None, 
         model_ode = bainite_model(bainite_params, act_energy_gb=q_gb, act_energy_autocatalysis=q_a, xb=xb, time=time,
                                   solver_options=solver_options)
         model = model_ode.y[0] + model_ode.y[1]
-        return experiment - model
+        if model.shape != experiment.shape:
+            residual = np.ones(len(experiment))
+        else:
+            residual = experiment - model
+        return residual
 
     fit = minimize(residuals, fit_params, **minimizer_options)
 
