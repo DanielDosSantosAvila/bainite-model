@@ -4,7 +4,7 @@ dos Santos Avila, D., Offerman, S. E., & Santofimia, M. J. (2024).
 Modeling the effect of prior austenite grain size on bainite formation kinetics.
 Acta Materialia, 266, 119656.
 doi.org/10.1016/j.actamat.2024.119656
-
+If you need any assistance, email me at D.dosSantosAvila@tudelft.nl
 
 # Examples
 This repository contains three examples that are sufficient for replicating all the results presented in the original publication.
