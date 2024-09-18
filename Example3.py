@@ -19,6 +19,7 @@ kinetics_d15 = TransformationKinetics(experiment_time_datapoints=time_data_exp_d
                                       experiment_fraction_datapoints=bainite_fraction_exp_d15)
 
 # Define composition-related parameters
+# If the sub-unit thickness is not specified, it will be calculated using van Bohemen's model (2018)
 comp_params = Composition(t0prime_celsius=450, c1=2500, c2=7500, c=0.3, si=2.0, mn=4.3, cr=0.3)
 
 # Define treatment-related parameters
